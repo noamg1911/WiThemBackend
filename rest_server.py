@@ -49,14 +49,24 @@ async def root():
     return "penis"
 
 
-def change_strudel_key(event_json):
+def change_strudel_key(event_json: json) -> json:
+    """
+    changes the strudel_timestamp key to @timestamp in the event json
+    :param event_json: the json of the event
+    :return: the new event json (changed key)
+    """
     strudel_val = event_json["strudel_timestamp"]
     event_json.pop("strudel_timestamp", None)
     event_json["@timestamp"] = strudel_val
     return event_json
 
 
-def push_data(index, post_data):
+def push_data(index: str, post_data: BaseModel) -> None:
+    """
+    pushes the data from the post query to the relevant index in the elastic DB
+    :param index: the index of the elastic DB (either search-users or search-event)
+    :param post_data: the data from the body of the post query
+    """
     json_data = json.loads(post_data.json())
     if index == "search-event":
         json_data = change_strudel_key(json_data)

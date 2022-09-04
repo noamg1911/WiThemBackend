@@ -31,6 +31,7 @@ def user_query_to_contacts(user: str, contacts: set) -> None:
             for phone_number in contact.values():
                 contacts.add(phone_number)
 
+
 def sms_manager(anomaly: dict) -> None:
     """
     goes over anomaly messages and sends SMSs accordingly
@@ -43,6 +44,7 @@ def sms_manager(anomaly: dict) -> None:
             print("Sending SMS to ", contacts)
             #sms_sender.send_sms(anomaly_message, contacts)
 
+
 def check_alerters() -> None:
     """
     checks alerters for anomalies
@@ -53,10 +55,12 @@ def check_alerters() -> None:
             sms_manager(anomaly)
             alerter.sms_sent = True
 
+
 def main():
     while True:
         print("Checking Alerts")
         check_alerters()
         time.sleep(ITERATION_TIME)
+
 
 main()
