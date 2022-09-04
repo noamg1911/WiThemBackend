@@ -15,7 +15,7 @@ def user_query_to_contacts(user: str, contacts: set) -> None:
     :param user: the user to query his contacts
     :param contacts: the list of contacts to send an SMS to
     """
-    query_result = elastic_query_handler.query_data("search-users", {'terms': {'id': user}})
+    query_result = elastic_query_handler.query_data("search-users", {"match": {"id": user}})
     user_contacts = query_result[0]["_source"]["contacts"]
     for contact in user_contacts:
         for phone_number in contact.values():
