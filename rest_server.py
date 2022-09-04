@@ -36,7 +36,7 @@ class Event(BaseModel):
 
 
 app = FastAPI()
-elastic_thing = ElasticHandler()
+data_pusher = ElasticHandler()
 
 
 @app.get("/")
@@ -54,15 +54,14 @@ async def create_setup(setup_account: Setup):
     """
     index = "search-users"
     json_setup_account = json.loads(setup_account.json())
-    elastic_thing.push_data(index, json_setup_account)
+    data_pusher.push_data(index, json_setup_account)
 
 
 @app.post("/event")
 async def create_event(event: Event):
     """
     creates an event json from an agent (mocked) post
-    :param
     """
     index = "search-event"
     json_event_account = json.loads(event.json())
-    elastic_thing.push_data(index, json_event_account)
+    data_pusher.push_data(index, json_event_account)
