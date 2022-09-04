@@ -55,8 +55,7 @@ def change_strudel_key(event_json: json) -> json:
     :param event_json: the json of the event
     :return: the new event json (changed key)
     """
-    strudel_val = event_json["strudel_timestamp"]
-    event_json.pop("strudel_timestamp", None)
+    strudel_val = event_json.pop("strudel_timestamp", None)
     event_json["@timestamp"] = strudel_val
     return event_json
 
