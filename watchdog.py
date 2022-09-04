@@ -1,3 +1,10 @@
+"""
+FileName: Watchdog
+Author: N.G 4.9.22
+Purpose: The Watchdog server that scans for anomalies and sends SMS messages
+         accordingly when needed
+"""
+
 from Alerts.MovementAlert import MovementAlert
 from SMSPackage.SMSSender import SMSService
 from ElasticHandler.ElasticHandler import ElasticHandler

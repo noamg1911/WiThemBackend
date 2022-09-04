@@ -1,7 +1,8 @@
 """
-FileName: 
-Author: N.G
-Purpose:
+FileName: REST Server
+Author: N.G 4.9.22
+Purpose: The REST server which takes user setup and event JSONs and uploads
+         them to the elastic DB
 """
 
 from fastapi import FastAPI
