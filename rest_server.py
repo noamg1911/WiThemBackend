@@ -49,15 +49,13 @@ async def root():
     return "penis"
 
 
-def change_strudel_key(event_json: json) -> json:
+def change_strudel_key(event_json: json) -> None:
     """
     changes the strudel_timestamp key to @timestamp in the event json
     :param event_json: the json of the event
-    :return: the new event json (changed key)
     """
     strudel_val = event_json.pop("strudel_timestamp", None)
     event_json["@timestamp"] = strudel_val
-    return event_json
 
 
 def push_data(index: str, post_data: BaseModel) -> None:
@@ -68,7 +66,7 @@ def push_data(index: str, post_data: BaseModel) -> None:
     """
     json_data = json.loads(post_data.json())
     if index == "search-event":
-        json_data = change_strudel_key(json_data)
+        change_strudel_key(json_data)
         json_data["Timestamp"] = int(datetime.datetime.timestamp(datetime.datetime.now()))
     data_pusher.push_data(index, json_data)
 
