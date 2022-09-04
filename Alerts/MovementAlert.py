@@ -1,7 +1,7 @@
 import datetime
 from Alerts.Alert import Alert
 
-ITERATION_TIME = 30 * 60
+ITERATION_TIME = 40
 ALERT_MESSAGE = "Phone hasn't been moved in a long time."
 
 
