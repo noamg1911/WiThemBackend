@@ -6,8 +6,8 @@ Purpose: The REST server which takes user setup and event JSONs and uploads
 """
 
 from fastapi import FastAPI
-from pydantic import BaseModel, Json
-from typing import Optional, List, Any
+from pydantic import BaseModel
+from typing import Optional, List
 from datetime import datetime
 from uuid import UUID
 from ElasticHandler.ElasticHandler import ElasticHandler
@@ -18,22 +18,24 @@ class Setup(BaseModel):
     """
     setup JSON for creating an old person's user
     """
-    id: UUID
-    name: str
-    contacts: List[dict]
-    mail: Optional[str]
-    phone: str
+    ID: UUID
+    Name: str
+    Contacts: List[dict]
+    Mail: Optional[str]
+    Phone: str
 
 
 class Event(BaseModel):
     """
     event JSON for a specific event
     """
-    event_id: UUID
-    user_id: UUID
-    event_type: int
-    extra_info: Optional[Json[Any]]
-    timestamp: datetime
+    EventID: int
+    AgentID: UUID
+    Sensor: str
+    Message: str
+    IsEmergency: bool
+    Timestamp: int
+    strudel_timestamp: str
 
 
 app = FastAPI()
@@ -48,15 +50,27 @@ async def root():
     return "penis"
 
 
+def change_strudel_key(event_json):
+    strudel_val = event_json["strudel_timestamp"]
+    event_json.pop("strudel_timestamp", None)
+    event_json["@timestamp"] = strudel_val
+    return event_json
+
+
+def push_data(index, post_data):
+    json_data = json.loads(post_data.json())
+    if index == "search-event":
+        json_data = change_strudel_key(json_data)
+    data_pusher.push_data(index, json_data)
+
+
 @app.post("/setup")
 async def create_setup(setup_account: Setup):
     """
     creates a setup account json from an agent (mocked) post
     :param setup_account
     """
-    index = "search-users"
-    json_setup_account = json.loads(setup_account.json())
-    data_pusher.push_data(index, json_setup_account)
+    push_data("search-users", setup_account)
 
 
 @app.post("/event")
@@ -65,6 +79,4 @@ async def create_event(event: Event):
     creates an event json from an agent (mocked) post
     :param event
     """
-    index = "search-event"
-    json_event_account = json.loads(event.json())
-    data_pusher.push_data(index, json_event_account)
+    push_data("search-event", event)
