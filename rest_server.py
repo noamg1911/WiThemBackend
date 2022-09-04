@@ -8,7 +8,7 @@ Purpose: The REST server which takes user setup and event JSONs and uploads
 from fastapi import FastAPI
 from pydantic import BaseModel
 from typing import Optional, List
-from datetime import datetime
+import datetime
 from uuid import UUID
 from ElasticHandler.ElasticHandler import ElasticHandler
 import json
@@ -18,11 +18,11 @@ class Setup(BaseModel):
     """
     setup JSON for creating an old person's user
     """
-    ID: UUID
-    Name: str
-    Contacts: List[dict]
+    id: int
+    name: str
+    contacts: List[dict]
     Mail: Optional[str]
-    Phone: str
+    phone: str
 
 
 class Event(BaseModel):
@@ -34,7 +34,6 @@ class Event(BaseModel):
     Sensor: str
     Message: str
     IsEmergency: bool
-    Timestamp: int
     strudel_timestamp: str
 
 
@@ -61,6 +60,7 @@ def push_data(index, post_data):
     json_data = json.loads(post_data.json())
     if index == "search-event":
         json_data = change_strudel_key(json_data)
+        json_data["Timestamp"] = int(datetime.datetime.timestamp(datetime.datetime.now()))
     data_pusher.push_data(index, json_data)
 
 
