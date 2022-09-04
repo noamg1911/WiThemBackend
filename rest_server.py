@@ -9,6 +9,7 @@ from pydantic import BaseModel, Json
 from typing import Optional, List, Any
 from datetime import datetime
 from uuid import UUID
+from ElasticHandler.ElasticHandler import ElasticHandler
 import json
 
 
@@ -18,9 +19,9 @@ class Setup(BaseModel):
     """
     id: UUID
     name: str
-    users: List[str]
+    contacts: List[dict]
     mail: Optional[str]
-    phone_number: str
+    phone: str
 
 
 class Event(BaseModel):
@@ -35,6 +36,7 @@ class Event(BaseModel):
 
 
 app = FastAPI()
+elastic_thing = ElasticHandler()
 
 
 @app.get("/")
@@ -46,18 +48,21 @@ async def root():
 
 
 @app.post("/setup")
-async def create_setup(setup: Setup):
+async def create_setup(setup_account: Setup):
     """
-    creates a setup json from an agent (mocked) post
+    creates a setup account json from an agent (mocked) post
     """
-    index = "setup"
-    json_setup = json.loads(setup.json())
+    index = "search-users"
+    json_setup_account = json.loads(setup_account.json())
+    elastic_thing.push_data(index, json_setup_account)
 
 
 @app.post("/event")
 async def create_event(event: Event):
     """
     creates an event json from an agent (mocked) post
+    :param
     """
-    index = "event"
-    json_event = json.loads(event.json())
+    index = "search-event"
+    json_event_account = json.loads(event.json())
+    elastic_thing.push_data(index, json_event_account)
