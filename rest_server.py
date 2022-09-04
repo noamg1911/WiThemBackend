@@ -51,6 +51,7 @@ async def root():
 async def create_setup(setup_account: Setup):
     """
     creates a setup account json from an agent (mocked) post
+    :param setup_account
     """
     index = "search-users"
     json_setup_account = json.loads(setup_account.json())
@@ -61,6 +62,7 @@ async def create_setup(setup_account: Setup):
 async def create_event(event: Event):
     """
     creates an event json from an agent (mocked) post
+    :param event
     """
     index = "search-event"
     json_event_account = json.loads(event.json())
