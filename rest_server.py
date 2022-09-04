@@ -30,7 +30,7 @@ class Event(BaseModel):
     event JSON for a specific event
     """
     EventID: int
-    AgentID: UUID
+    AgentID: str
     Sensor: str
     Message: str
     IsEmergency: bool
