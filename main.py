@@ -6,19 +6,20 @@ Purpose:
 
 from fastapi import FastAPI
 from pydantic import BaseModel, Json
-from typing import Union, List, Any
+from typing import Optional, List, Any
 from datetime import datetime
 from uuid import UUID
+import json
 
 
 class Setup(BaseModel):
     """
     setup JSON for creating an old person's user
     """
-    ID: UUID
+    ID: str
     name: str
     users: List[str]
-    mail: Union[str, None] = None
+    mail: Optional[str]
     phone_number: str
 
 
@@ -29,7 +30,7 @@ class Event(BaseModel):
     event_ID: UUID
     user_ID: UUID
     event_type: int
-    extra_info: Union[Json[Any], None] = None
+    extra_info: Optional[Json[Any]]
     timestamp: datetime
 
 
@@ -41,6 +42,13 @@ async def root():
     return "penis"
 
 
+@app.post("/setup")
+async def create_setup(setup: Setup):
+    json_setup = json.loads(setup.json())
+    json_setup["index"] = "setup"
 
 
-
+@app.post("/event")
+async def create_event(event: Event):
+    json_event = json.loads(event.json())
+    json_event["index"] = "event"
